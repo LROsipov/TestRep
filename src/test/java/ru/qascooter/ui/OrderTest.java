@@ -28,7 +28,7 @@ public class OrderTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("isOrderData")
     @Description("Оформление заказа")
-    public void testOrder(int number,String name, String family, String address, String phone) throws InterruptedException {
+    void testOrder(int number,String name, String family, String address, String phone) throws InterruptedException {
         try {
             openMainPage();
             clickOrderButton(number);
@@ -51,7 +51,7 @@ public class OrderTest extends BaseTest {
         Allure.step("Выбираем  <когда привезти>",
                 ()-> orderForRentPage.inputDate(date));
         Allure.step("Выбираем  <срок аренды>",
-                ()-> orderForRentPage.dateRenta());
+                ()-> orderForRentPage.dateRent());
         Allure.step("Кликаем по кнопке  <Заказать>",
                 ()-> orderForRentPage.clickOrder());
         Allure.step("Кликаем по кнопке  <Да>",

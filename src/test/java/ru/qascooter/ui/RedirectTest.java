@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
 import static com.codeborne.selenide.WebDriverConditions.url;
 
-public class RedirectTest extends BaseTest {
+ class RedirectTest extends BaseTest {
     public final String REDIRECT = "https://dzen.ru/?yredirect=true";
     public final String SCOOTER_SITE = "https://qa-scooter.praktikum-services.ru/";
 
@@ -19,7 +19,7 @@ public class RedirectTest extends BaseTest {
     @Test
     @Feature("Редирект по клику на лого <Яндекс>")
     @Description("Редирект по клику на лого <Яндекс>")
-    public void testRedirect()  {
+     void testRedirect()  {
         try {openMainPage();
             clickLogoYandex();
             checkUrlSite(REDIRECT);
@@ -31,7 +31,7 @@ public class RedirectTest extends BaseTest {
     @Test
     @Feature("Открытие главной страницы по клику на лого <Самокат>")
     @Description("Открытие главной страницы по клику на лого <Самокат>")
-    public void testRedirectScooter()  {
+     void testRedirectScooter()  {
         try {
             openMainPage();
             clickLogoScooter();
@@ -45,22 +45,21 @@ public class RedirectTest extends BaseTest {
         Allure.step("Кликаем на лого  <Яндекс>",
                 ()->  mainPage.clickYandex());
         Allure.step("Проверяем что  открылась новая вкалдка с сайтом ",
-                ()->  mainPage.switchWindow());
-            webdriver().shouldHave(numberOfWindows(2));
+                ()-> webdriver().shouldHave(numberOfWindows(2)));
         Allure.step("Переключаемся на открывщиюся вкалду ",
                 ()->  Selenide.switchTo().window(1));
     }
     public void clickLogoScooter() {
         MainPage mainPage = new MainPage();
-        Allure.step("Кликаем на кнопке  <Заказать>",
-                ()->  mainPage.clickOrderButton(1));
+        Allure.step("Переходим на страницу  <Статус заказа>",
+                ()->  mainPage.clickOrderStatus());
         Allure.step("Кликаем на лого <Самокат> ",
                 ()->  mainPage.clickScooter());
 
     }
     public void checkUrlSite(String URL) {
         MainPage mainPage = new MainPage();
-        Allure.step("Проверяем что открыт сайт"+URL,
+        Allure.step("Проверяем что открыт сайт "+URL,
                 ()->  webdriver().shouldHave(url(URL)));
     }
 }
