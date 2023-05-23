@@ -11,9 +11,10 @@ import org.junit.jupiter.api.BeforeAll;
 
 public abstract class BaseTest {
     public final String URL = "https://qa-scooter.praktikum-services.ru/";
+
     public static void start() {
         WebDriverManager.chromedriver().setup();
-        Configuration.browser= "chrome";
+        Configuration.browser = "chrome";
         Configuration.driverManagerEnabled = true;
         Configuration.browserSize = "1920x1080";
         Configuration.headless = false; // false чтобы видеть как автотесты прогоняются в браузере
@@ -24,15 +25,13 @@ public abstract class BaseTest {
     public static void setUp() {
         start();
     }
+
     @AfterAll
     public static void tearDown() {
         SelenideLogger.removeListener("AllureSelenide");
         Selenide.closeWebDriver();
     }
-    @Step("Открываем сайт")
-    public void openMainPage() {
-        Selenide.open(URL);
-    }
+
     @Step("Закрываем браузер")
     void closeWindow() {
         Selenide.closeWindow();

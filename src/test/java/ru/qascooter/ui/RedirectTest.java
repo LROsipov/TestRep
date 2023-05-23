@@ -4,6 +4,10 @@ import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.qascooter.pages.MainPage;
 
@@ -11,55 +15,45 @@ import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.numberOfWindows;
 import static com.codeborne.selenide.WebDriverConditions.url;
 
- class RedirectTest extends BaseTest {
-    public final String REDIRECT = "https://dzen.ru/?yredirect=true";
-    public final String SCOOTER_SITE = "https://qa-scooter.praktikum-services.ru/";
+@Story("Проверка работы редиректов")
+@DisplayName("Проверка работы редиректов")
+class RedirectTest extends BaseTest {
+    private final String REDIRECT = "https://dzen.ru/?yredirect=true";
+    private final String SCOOTER_SITE = "https://qa-scooter.praktikum-services.ru/";
+    private MainPage mainPage;
 
-
-    @Test
-    @Feature("Редирект по клику на лого <Яндекс>")
-    @Description("Редирект по клику на лого <Яндекс>")
-     void testRedirect()  {
-        try {openMainPage();
-            clickLogoYandex();
-            checkUrlSite(REDIRECT);
-        } finally {
-            closeWindow();
-        }
+    @BeforeEach
+    void arrangeTestData() {
+        mainPage = MainPage.open();
     }
 
     @Test
-    @Feature("Открытие главной страницы по клику на лого <Самокат>")
-    @Description("Открытие главной страницы по клику на лого <Самокат>")
-     void testRedirectScooter()  {
-        try {
-            openMainPage();
-            clickLogoScooter();
-            checkUrlSite(SCOOTER_SITE);
-        } finally {
-            closeWindow();
-        }
-    }
-    public void clickLogoYandex() {
-        MainPage mainPage = new MainPage();
-        Allure.step("Кликаем на лого  <Яндекс>",
-                ()->  mainPage.clickYandex());
+    @Feature("Редирект по клику на лого [Яндекс]")
+    @Description("Редирект по клику на лого [Яндекс]")
+    void testRedirect() {
+        mainPage.clickLogoYandex();
         Allure.step("Проверяем что  открылась новая вкалдка с сайтом ",
-                ()-> webdriver().shouldHave(numberOfWindows(2)));
+                () -> webdriver().shouldHave(numberOfWindows(2)));
         Allure.step("Переключаемся на открывщиюся вкалду ",
-                ()->  Selenide.switchTo().window(1));
+                () -> Selenide.switchTo().window(1));
+        Allure.step("Проверяем что открыт сайт " + REDIRECT,
+                () -> webdriver().shouldHave(url(REDIRECT)));
     }
-    public void clickLogoScooter() {
-        MainPage mainPage = new MainPage();
-        Allure.step("Переходим на страницу  <Статус заказа>",
-                ()->  mainPage.clickOrderStatus());
-        Allure.step("Кликаем на лого <Самокат> ",
-                ()->  mainPage.clickScooter());
 
+    @Test
+    @Feature("Открытие главной страницы по клику на лого [Самокат]")
+    @Description("Открытие главной страницы по клику на лого [Самокат]")
+    void testRedirectScooter() {
+        mainPage.clickOrderStatus().clickGoButton();
+        mainPage.clickScooter();
+        Allure.step("Проверяем что открыт сайт " + SCOOTER_SITE,
+                () -> webdriver().shouldHave(url(SCOOTER_SITE)));
     }
-    public void checkUrlSite(String URL) {
-        MainPage mainPage = new MainPage();
-        Allure.step("Проверяем что открыт сайт "+URL,
-                ()->  webdriver().shouldHave(url(URL)));
+
+    @AfterEach
+    public void close() {
+        closeWindow();
     }
+
+
 }
